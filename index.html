@@ -936,15 +936,6 @@
             }
         }
         
-        function saveToStorage() {
-            localStorage.setItem('shintorg_drivers', JSON.stringify(LOCAL_DRIVERS));
-            localStorage.setItem('shintorg_trips', JSON.stringify(LOCAL_TRIPS));
-            localStorage.setItem('shintorg_messages', JSON.stringify(LOCAL_MESSAGES));
-            localStorage.setItem('shintorg_archive', JSON.stringify(LOCAL_ARCHIVE));
-            localStorage.setItem('shintorg_rate', currentRate.toString());
-            localStorage.setItem('shintorg_queue', JSON.stringify(offlineQueue));
-        }
-        
         // ============ ОФЛАЙН ============
         function setupOfflineDetection() {
             window.addEventListener('online', function() {
@@ -975,7 +966,7 @@
             document.getElementById('sync-indicator').style.display = 'block';
             
             offlineQueue = [];
-            saveToStorage();
+            localStorage.setItem('shintorg_queue', JSON.stringify(offlineQueue));
             
             setTimeout(() => {
                 document.getElementById('sync-indicator').style.display = 'none';
@@ -988,7 +979,7 @@
                 data: data,
                 timestamp: new Date().toISOString()
             });
-            saveToStorage();
+            localStorage.setItem('shintorg_queue', JSON.stringify(offlineQueue));
         }
         
         // ============ АВТОРИЗАЦИЯ ============
@@ -1092,7 +1083,7 @@
             };
             
             LOCAL_DRIVERS.push(newDriver);
-            saveToStorage();
+            localStorage.setItem('shintorg_drivers', JSON.stringify(LOCAL_DRIVERS));
             
             alert('✅ Регистрация успешна! Теперь войдите.');
             backToLogin();
@@ -1128,7 +1119,7 @@
                         driver.lng = lng;
                         driver.location = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
                         driver.lastSeen = new Date();
-                        saveToStorage();
+                        localStorage.setItem('shintorg_drivers', JSON.stringify(LOCAL_DRIVERS));
                     }
                     
                     document.getElementById('geo-status-block').innerHTML = `
@@ -1192,7 +1183,7 @@
                 driver.status = 'active';
                 driver.shiftType = 'city';
                 driver.shiftStartTime = shiftStartTime.toISOString();
-                saveToStorage();
+                localStorage.setItem('shintorg_drivers', JSON.stringify(LOCAL_DRIVERS));
             }
             
             document.getElementById('shift-start-btn').classList.add('hidden');
@@ -1208,7 +1199,17 @@
         
         // ============ ИСПРАВЛЕННАЯ ФУНКЦИЯ ЗАВЕРШЕНИЯ СМЕНЫ ============
         window.endShift = function() {
-            if (!shiftActive || !currentUser) return;
+            console.log('endShift вызвана');
+            
+            if (!shiftActive) {
+                alert('Смена не активна');
+                return;
+            }
+            
+            if (!currentUser) {
+                alert('Нет пользователя');
+                return;
+            }
             
             // Вычисляем количество секунд
             const shiftSeconds = Math.floor((new Date() - shiftStartTime) / 1000);
@@ -1218,7 +1219,7 @@
             let wholeHours = Math.floor(shiftHours);
             let minutesPart = (shiftHours - wholeHours) * 60;
             
-            // Округляем до 0.5 часа (как в оригинале)
+            // Округляем до 0.5 часа
             if (minutesPart < 15) {
                 shiftHours = wholeHours;
             } else if (minutesPart < 45) {
@@ -1258,8 +1259,15 @@
                 driver.status = 'offline';
                 driver.shiftType = null;
                 driver.shiftStartTime = null;
-                saveToStorage();
             }
+            
+            // СОХРАНЯЕМ ВСЕ ДАННЫЕ
+            localStorage.setItem('shintorg_drivers', JSON.stringify(LOCAL_DRIVERS));
+            localStorage.setItem('shintorg_trips', JSON.stringify(LOCAL_TRIPS));
+            localStorage.setItem('shintorg_messages', JSON.stringify(LOCAL_MESSAGES));
+            localStorage.setItem('shintorg_archive', JSON.stringify(LOCAL_ARCHIVE));
+            localStorage.setItem('shintorg_rate', currentRate.toString());
+            localStorage.setItem('shintorg_queue', JSON.stringify(offlineQueue));
             
             // Останавливаем геолокацию
             if (geoWatchId) {
@@ -1275,10 +1283,6 @@
             document.getElementById('shift-end-btn').classList.add('hidden');
             document.getElementById('shift-comment').value = '';
             document.getElementById('geo-status-block').innerHTML = '<span class="geo-inactive"><i class="bi bi-satellite"></i> Геолокация не активна</span>';
-            
-            saveToStorage();
-            
-            addToOfflineQueue('end_shift', newTrip);
             
             alert(`✅ Смена завершена! Заработано: ${shiftEarn} ₽`);
             loadDriverData();
@@ -1311,9 +1315,7 @@
             };
             
             LOCAL_TRIPS.push(newTrip);
-            saveToStorage();
-            
-            addToOfflineQueue('add_trip', newTrip);
+            localStorage.setItem('shintorg_trips', JSON.stringify(LOCAL_TRIPS));
             
             document.getElementById('inter-direction').value = '';
             document.getElementById('inter-sum').value = '';
@@ -1386,7 +1388,7 @@
             if (msg) {
                 msg.read = true;
                 msg.readAt = new Date().toISOString();
-                saveToStorage();
+                localStorage.setItem('shintorg_messages', JSON.stringify(LOCAL_MESSAGES));
                 checkDriverMessages();
             }
             
@@ -1432,7 +1434,7 @@
             };
             
             LOCAL_MESSAGES.push(newMsg);
-            saveToStorage();
+            localStorage.setItem('shintorg_messages', JSON.stringify(LOCAL_MESSAGES));
             
             document.getElementById('message-text').value = '';
             alert('✅ Сообщение отправлено');
@@ -1582,7 +1584,10 @@
                 LOCAL_DRIVERS = LOCAL_DRIVERS.filter(d => d.phone !== phone);
                 LOCAL_TRIPS = LOCAL_TRIPS.filter(t => t.driverId !== phone);
                 LOCAL_MESSAGES = LOCAL_MESSAGES.filter(m => m.driverPhone !== phone);
-                saveToStorage();
+                
+                localStorage.setItem('shintorg_drivers', JSON.stringify(LOCAL_DRIVERS));
+                localStorage.setItem('shintorg_trips', JSON.stringify(LOCAL_TRIPS));
+                localStorage.setItem('shintorg_messages', JSON.stringify(LOCAL_MESSAGES));
                 
                 alert('✅ Водитель удален из системы');
                 loadAdminDrivers();
@@ -1619,7 +1624,7 @@
                 const driver = LOCAL_DRIVERS.find(d => d.phone === phone);
                 if (driver) {
                     driver.password = newPass;
-                    saveToStorage();
+                    localStorage.setItem('shintorg_drivers', JSON.stringify(LOCAL_DRIVERS));
                     alert('✅ Пароль обновлен');
                     loadAdminDrivers();
                     loadAllDrivers();
@@ -1675,7 +1680,7 @@
                 }
             }
             
-            saveToStorage();
+            localStorage.setItem('shintorg_trips', JSON.stringify(LOCAL_TRIPS));
             alert('✅ Поездка обновлена');
             loadAdminTrips();
             loadAdminReports();
@@ -1684,7 +1689,7 @@
         window.deleteTrip = function(tripId) {
             if (confirm('⚠️ Удалить поездку?')) {
                 LOCAL_TRIPS = LOCAL_TRIPS.filter(t => t.id !== tripId);
-                saveToStorage();
+                localStorage.setItem('shintorg_trips', JSON.stringify(LOCAL_TRIPS));
                 alert('✅ Поездка удалена');
                 loadAdminTrips();
                 loadAdminReports();
@@ -1940,11 +1945,11 @@
                         ${Object.keys(archive.summary || {}).map(name => `
                             <div class="d-flex justify-content-between mb-2">
                                 <span>${name}</span>
-                                <span class="fw-bold">${archive.summary[name]?.totalEarn || 0} ₽</span>
+                                <span class="fw-bold">${arch.summary[name]?.totalEarn || 0} ₽</span>
                             </div>
                             <div class="d-flex gap-3 text-secondary small mb-2">
-                                <span>🚕 ${archive.summary[name]?.cityHours?.toFixed(1) || 0} ч</span>
-                                <span>🛣️ ${archive.summary[name]?.interTrips || 0} поездок</span>
+                                <span>🚕 ${arch.summary[name]?.cityHours?.toFixed(1) || 0} ч</span>
+                                <span>🛣️ ${arch.summary[name]?.interTrips || 0} поездок</span>
                             </div>
                         `).join('')}
                     </div>
@@ -1956,7 +1961,7 @@
         window.deleteArchive = function(index) {
             if (confirm('⚠️ Удалить этот архив?\nЭто действие нельзя отменить.')) {
                 LOCAL_ARCHIVE.splice(index, 1);
-                saveToStorage();
+                localStorage.setItem('shintorg_archive', JSON.stringify(LOCAL_ARCHIVE));
                 alert('✅ Архив удален');
                 loadArchiveList();
                 updateArchiveSelectors();
@@ -1966,7 +1971,7 @@
         window.clearAllArchives = function() {
             if (confirm('⚠️ Удалить ВСЕ архивы?\nЭто действие нельзя отменить.')) {
                 LOCAL_ARCHIVE = [];
-                saveToStorage();
+                localStorage.setItem('shintorg_archive', JSON.stringify(LOCAL_ARCHIVE));
                 alert('✅ Все архивы удалены');
                 loadArchiveList();
                 updateArchiveSelectors();
@@ -2264,7 +2269,10 @@
             
             // Удаляем поездки за этот месяц
             LOCAL_TRIPS = LOCAL_TRIPS.filter(t => !t.date || !t.date.startsWith(month));
-            saveToStorage();
+            
+            // СОХРАНЯЕМ
+            localStorage.setItem('shintorg_archive', JSON.stringify(LOCAL_ARCHIVE));
+            localStorage.setItem('shintorg_trips', JSON.stringify(LOCAL_TRIPS));
             
             alert(`✅ Месяц ${month} закрыт! Итого: ${total} ₽`);
             
@@ -2298,7 +2306,6 @@
             const newPass = document.getElementById('admin-new-pass').value;
             if (newPass) {
                 ADMIN_CRED.password = newPass;
-                saveToStorage();
                 alert('✅ Пароль администратора изменен');
                 document.getElementById('admin-new-pass').value = '';
             }
