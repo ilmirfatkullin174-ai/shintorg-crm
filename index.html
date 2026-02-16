@@ -25,7 +25,6 @@
             font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
         }
         
-        /* Мобильный контейнер только для водителя */
         .mobile-container {
             max-width: 450px;
             width: 100%;
@@ -36,7 +35,6 @@
             position: relative;
         }
         
-        /* Админ-панель на весь экран */
         .admin-wrapper {
             max-width: 1600px;
             margin: 0 auto;
@@ -241,7 +239,6 @@
             display: none !important;
         }
         
-        /* Адаптивные таблицы */
         .table-responsive-custom {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -304,7 +301,7 @@
     </style>
 </head>
 <body>
-    <!-- Индикаторы офлайн/синхронизация -->
+    <!-- Индикаторы -->
     <div id="sync-indicator" style="position: fixed; top: 20px; right: 20px; z-index: 9999; display: none;">
         <span class="sync-badge"><i class="bi bi-cloud-check"></i> Синхронизация...</span>
     </div>
@@ -312,14 +309,14 @@
         <span class="offline-badge"><i class="bi bi-wifi-off"></i> Офлайн</span>
     </div>
 
-    <!-- ========== ЭКРАН ЗАГРУЗКИ ========== -->
+    <!-- ЭКРАН ЗАГРУЗКИ -->
     <div id="loading-screen" class="vh-100 d-flex flex-column justify-content-center align-items-center" style="background: linear-gradient(145deg, #0f5e7e, #0a405a);">
         <div class="spinner-border text-white mb-3" style="width: 4rem; height: 4rem;"></div>
         <h4 class="text-white">Шинторг Сургут</h4>
         <p class="text-white-50">Загрузка...</p>
     </div>
 
-    <!-- ========== ЭКРАН ВХОДА ========== -->
+    <!-- ЭКРАН ВХОДА -->
     <div id="login-screen" class="hidden">
         <div class="mobile-container">
             <div class="app-header text-center">
@@ -384,7 +381,7 @@
         </div>
     </div>
 
-    <!-- ========== РЕГИСТРАЦИЯ ========== -->
+    <!-- РЕГИСТРАЦИЯ -->
     <div id="register-screen" class="hidden">
         <div class="mobile-container">
             <div class="app-header">
@@ -410,7 +407,7 @@
         </div>
     </div>
 
-    <!-- ========== КАБИНЕТ ВОДИТЕЛЯ (МОБИЛЬНЫЙ) ========== -->
+    <!-- КАБИНЕТ ВОДИТЕЛЯ -->
     <div id="driver-cabinet" class="hidden">
         <div class="mobile-container">
             <div class="app-header d-flex justify-content-between align-items-center">
@@ -513,7 +510,7 @@
         </div>
     </div>
 
-    <!-- ========== КАБИНЕТ АДМИНИСТРАТОРА (ПОЛНОЭКРАННЫЙ) ========== -->
+    <!-- КАБИНЕТ АДМИНИСТРАТОРА -->
     <div id="admin-cabinet" class="hidden">
         <div class="admin-wrapper">
             <!-- ШАПКА -->
@@ -564,10 +561,10 @@
                 <div class="mobile-tab" onclick="switchAdminTab('settings')">Настройки</div>
             </div>
             
-            <!-- ===== АКТИВНЫЕ ВОДИТЕЛИ ===== -->
+            <!-- АКТИВНЫЕ ВОДИТЕЛИ -->
             <div id="admin-drivers-tab">
                 <div class="admin-card">
-                    <h5 class="mb-4"><i class="bi bi-people-fill"></i> Активные водители (работали в этом месяце)</h5>
+                    <h5 class="mb-4"><i class="bi bi-people-fill"></i> Активные водители</h5>
                     <div class="table-responsive-custom">
                         <table class="admin-table">
                             <thead>
@@ -586,7 +583,7 @@
                     </div>
                 </div>
                 
-                <!-- ОТПРАВКА СООБЩЕНИЙ -->
+                <!-- СООБЩЕНИЯ -->
                 <div class="admin-card mt-4">
                     <h5 class="mb-4"><i class="bi bi-chat-dots"></i> Отправить сообщение</h5>
                     <div class="row g-3">
@@ -611,7 +608,7 @@
                 </div>
             </div>
             
-            <!-- ===== ВСЕ ВОДИТЕЛИ ===== -->
+            <!-- ВСЕ ВОДИТЕЛИ -->
             <div id="admin-all-drivers-tab" class="hidden">
                 <div class="admin-card">
                     <h5 class="mb-4"><i class="bi bi-database"></i> Все зарегистрированные водители</h5>
@@ -632,7 +629,7 @@
                 </div>
             </div>
             
-            <!-- ===== ПОЕЗДКИ ===== -->
+            <!-- ПОЕЗДКИ -->
             <div id="admin-trips-tab" class="hidden">
                 <div class="admin-card">
                     <h5 class="mb-4"><i class="bi bi-pencil-square"></i> Редактирование поездок</h5>
@@ -655,7 +652,7 @@
                 </div>
             </div>
             
-            <!-- ===== ОТЧЕТЫ ===== -->
+            <!-- ОТЧЕТЫ -->
             <div id="admin-reports-tab" class="hidden">
                 <div class="admin-card">
                     <div class="row mb-4">
@@ -676,7 +673,6 @@
                         </div>
                     </div>
                     
-                    <!-- ПОСМЕННЫЙ -->
                     <div id="admin-daily-report-container">
                         <div class="d-flex justify-content-between mb-3">
                             <h5 class="fw-bold">Поездки за месяц</h5>
@@ -692,7 +688,6 @@
                         <div id="admin-daily-report-content" style="max-height: 500px; overflow-y: auto;"></div>
                     </div>
                     
-                    <!-- СВОДНЫЙ -->
                     <div id="admin-summary-report-container" class="hidden">
                         <div class="d-flex justify-content-between mb-3">
                             <h5 class="fw-bold">Сводка по водителям</h5>
@@ -732,14 +727,14 @@
                         
                         <div class="mt-4">
                             <button class="btn btn-warning btn-lg w-100" onclick="closeMonth()">
-                                <i class="bi bi-file-earmark-check"></i> ЗАКРЫТЬ МЕСЯЦ (архивировать)
+                                <i class="bi bi-file-earmark-check"></i> ЗАКРЫТЬ МЕСЯЦ
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- ===== АРХИВ ===== -->
+            <!-- АРХИВ -->
             <div id="admin-archive-tab" class="hidden">
                 <div class="admin-card">
                     <div class="d-flex justify-content-between mb-4">
@@ -761,7 +756,7 @@
                 </div>
             </div>
             
-            <!-- ===== НАСТРОЙКИ ===== -->
+            <!-- НАСТРОЙКИ -->
             <div id="admin-settings-tab" class="hidden">
                 <div class="row">
                     <div class="col-md-6">
@@ -811,7 +806,7 @@
         </div>
     </div>
 
-    <!-- ========== МОДАЛЬНОЕ ОКНО КАРТЫ ========== -->
+    <!-- МОДАЛЬНОЕ ОКНО КАРТЫ -->
     <div id="map-modal" class="hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; flex-direction: column;">
         <div style="padding: 20px; background: #0f5e7e; color: white; display: flex; justify-content: space-between;">
             <h4 class="mb-0" id="map-driver-name"></h4>
@@ -853,12 +848,10 @@
             setupOfflineDetection();
             setupAutoSync();
             
-            // Проверяем сохраненную сессию
             checkStoredSession();
             
             document.getElementById('loading-screen').classList.add('hidden');
             
-            // Если нет сохраненной сессии - показываем логин
             if (!currentUser && !currentRole) {
                 document.getElementById('login-screen').classList.remove('hidden');
             }
@@ -868,7 +861,7 @@
             updateArchiveSelectors();
         };
         
-        // ============ ПРОВЕРКА СОХРАНЕННОЙ СЕССИИ ============
+        // ============ ПРОВЕРКА СЕССИИ ============
         function checkStoredSession() {
             const savedUser = localStorage.getItem('shintorg_current_user');
             const savedRole = localStorage.getItem('shintorg_current_role');
@@ -879,7 +872,6 @@
                     currentRole = savedRole;
                     
                     if (currentRole === 'driver') {
-                        // Восстанавливаем смену если была активна
                         const driver = LOCAL_DRIVERS.find(d => d.phone === currentUser.phone);
                         if (driver && driver.status === 'active') {
                             shiftActive = true;
@@ -923,7 +915,7 @@
             localStorage.removeItem('shintorg_current_role');
         }
         
-        // ============ localStorage ============
+        // ============ LOCALSTORAGE ============
         function loadFromStorage() {
             try {
                 const drivers = localStorage.getItem('shintorg_drivers');
@@ -982,7 +974,6 @@
             
             document.getElementById('sync-indicator').style.display = 'block';
             
-            // Просто очищаем очередь, так как все данные уже в localStorage
             offlineQueue = [];
             saveToStorage();
             
@@ -1024,7 +1015,6 @@
                 document.getElementById('driver-cabinet').classList.remove('hidden');
                 document.getElementById('driver-name-badge').innerHTML = `<i class="bi bi-person-circle"></i> ${driver.short || driver.name}`;
                 
-                // Восстанавливаем смену если была активна
                 if (driver.status === 'active' && driver.shiftType === 'city') {
                     shiftActive = true;
                     shiftStartTime = driver.shiftStartTime ? new Date(driver.shiftStartTime) : new Date();
@@ -1190,7 +1180,7 @@
             }
         };
         
-        // ============ СМЕНА ============
+        // ============ ИСПРАВЛЕННАЯ СМЕНА ============
         window.startShift = function() {
             if (!currentUser) return;
             
@@ -1211,44 +1201,58 @@
             startTimer();
             startGeolocation();
             
-            // Добавляем в офлайн-очередь
             addToOfflineQueue('start_shift', { phone: currentUser.phone, time: shiftStartTime });
             
             alert('🚕 Смена начата!');
         };
         
+        // ============ ИСПРАВЛЕННАЯ ФУНКЦИЯ ЗАВЕРШЕНИЯ СМЕНЫ ============
         window.endShift = function() {
             if (!shiftActive || !currentUser) return;
             
-            const seconds = Math.floor((new Date() - shiftStartTime) / 1000);
+            // Вычисляем количество секунд
+            const shiftSeconds = Math.floor((new Date() - shiftStartTime) / 1000);
             
-            // Расчет часов с округлением
-            let hours = seconds / 3600;
-            let whole = Math.floor(hours);
-            let mins = (hours - whole) * 60;
+            // Переводим в часы
+            let shiftHours = shiftSeconds / 3600;
+            let wholeHours = Math.floor(shiftHours);
+            let minutesPart = (shiftHours - wholeHours) * 60;
             
-            if (mins < 15) hours = whole;
-            else if (mins < 45) hours = whole + 0.5;
-            else hours = whole + 1;
-            if (hours < 1) hours = 1;
+            // Округляем до 0.5 часа (как в оригинале)
+            if (minutesPart < 15) {
+                shiftHours = wholeHours;
+            } else if (minutesPart < 45) {
+                shiftHours = wholeHours + 0.5;
+            } else {
+                shiftHours = wholeHours + 1;
+            }
             
-            const earn = Math.round(hours * currentRate);
+            // Минимум 1 час
+            if (shiftHours < 1) {
+                shiftHours = 1;
+            }
+            
+            // Расчет заработка
+            const shiftEarn = Math.round(shiftHours * currentRate);
             const comment = document.getElementById('shift-comment').value || '';
             
+            // Создаем запись о поездке
             const newTrip = {
                 id: Date.now().toString(),
                 driverId: currentUser.phone,
                 driverName: currentUser.short || currentUser.name,
                 date: new Date().toISOString().split('T')[0],
                 type: 'город',
-                hours: hours,
-                earn: earn,
+                hours: shiftHours,
+                earn: shiftEarn,
                 comment: comment,
                 timestamp: new Date().toISOString()
             };
             
+            // Сохраняем
             LOCAL_TRIPS.push(newTrip);
             
+            // Обновляем статус водителя
             const driver = LOCAL_DRIVERS.find(d => d.phone === currentUser.phone);
             if (driver) {
                 driver.status = 'offline';
@@ -1257,11 +1261,13 @@
                 saveToStorage();
             }
             
+            // Останавливаем геолокацию
             if (geoWatchId) {
                 navigator.geolocation.clearWatch(geoWatchId);
                 geoWatchId = null;
             }
             
+            // Сбрасываем интерфейс
             shiftActive = false;
             clearInterval(shiftTimer);
             document.getElementById('timer-display').innerText = '00:00:00';
@@ -1272,10 +1278,9 @@
             
             saveToStorage();
             
-            // Добавляем в офлайн-очередь
             addToOfflineQueue('end_shift', newTrip);
             
-            alert(`✅ Смена завершена! Заработано: ${earn} ₽`);
+            alert(`✅ Смена завершена! Заработано: ${shiftEarn} ₽`);
             loadDriverData();
         };
         
@@ -1308,7 +1313,6 @@
             LOCAL_TRIPS.push(newTrip);
             saveToStorage();
             
-            // Добавляем в офлайн-очередь
             addToOfflineQueue('add_trip', newTrip);
             
             document.getElementById('inter-direction').value = '';
